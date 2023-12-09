@@ -9,12 +9,33 @@ const DebugLog = (level, message) => {
     }
 }
 
-const GetDate = (fomatString) =>{
+const GetDate = (fomatString) => {
     let currentDate = new Date();
     return format(currentDate, 'yyyy-MM-dd');
 }
 
+const ResponseData = (status, data, msg) => {
+    return {
+        status: status, // true fail
+        data: data, // data response
+        msg: msg // message if status = false
+    }
+};
+
+const CheckNullString = (str) => {
+    if (str === null || str === undefined || str === "") {
+        return true
+    }
+    return false
+}
+
 module.exports = {
     DebugLog,
-    GetDate
+    GetDate,
+    ResponseData,
+    CheckNullString
 }
+
+
+// get thì dùng tham chiếu là query
+// post thì dùng tham chiếu là body

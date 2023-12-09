@@ -1,8 +1,9 @@
-﻿
-const DatabaseName = "MyDB"
+﻿const DatabaseName = "MyDB"
 const ServerPort = 5503
+const LimitSizeFile = 10
 
 module.exports = {
     DatabaseName,
-    ServerPort
+    ServerPort,
+    LimitSizeFile
 }

@@ -2,11 +2,11 @@
 const Schema = mongoose.Schema;
 
 const SchemaGuest = new Schema({
-    name : {type:String},
-    phone :{type:String}, // Key
-    email : {type:String},
-    address : {type:String},
-    level: {type:String,default:"NORMAL"} // NORMAL, VIP
-});
+    name: {type: String},
+    phone: {type: String}, // Key
+    email: {type: String},
+    address: {type: String},
+    level: {type: String, default: "normal"} // normal, vip
+}, {timestamps: true});
 
-module.exports = mongoose.model('Guest',SchemaGuest)
+module.exports = mongoose.model('Guest', SchemaGuest)
