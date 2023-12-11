@@ -34,7 +34,7 @@ const findByInfo = async (req, res) => {
             result = await GuestModel.find({name: {$regex: req.body.name}});
             return res.json(Extension.ResponseData(true, result, 'Lấy dữ liệu khách hàng thành công!'))
         } else {
-            return res.json(Extension.ResponseData(false, e, 'Không tìm thấy khách hàng có thông tin như trên!'))
+            return res.json(Extension.ResponseData(false, null, 'Không tìm thấy khách hàng có thông tin như trên!'))
         }
     } catch (e) {
         res.status(404).json(Extension.ResponseData(false, e, 'Lấy dữ liệu khách hàng thất bại!'))
@@ -77,7 +77,7 @@ const add = async (data) => {
         await result.save();
         return Extension.ResponseData(true, result, 'Tạo khách hàng thành công!');
     } catch (e) {
-        res.json(Extension.ResponseData(false, e, 'Tạo khách hàng thất bị!'));
+        return Extension.ResponseData(false, e, 'Tạo khách hàng thất bị!');
     }
 }
 
