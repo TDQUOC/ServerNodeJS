@@ -1,10 +1,11 @@
 ﻿const DetailProduct = {
-    productId: {type: String},
-    code: {type: String},
-    productName: {type: String},
-    quantity: {type: Number, default: 0}
+    productId: String,
+    code: String,
+    productName:  String,
+    quantity:Number
 }
 
 module.exports = {
     DetailProduct
 }
+

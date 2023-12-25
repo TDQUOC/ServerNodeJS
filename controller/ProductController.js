@@ -1,74 +1,70 @@
 ﻿const ProductModel = require('../model/ProductModel');
-const extension = require('../Plugin/Extension');
+const {ResponseData, DeleteFile} = require("../Plugin/Extension");
+const {AddDataSuccess, AddDataFail, GetDataSuccess, GetDataFail, DeleteDataSuccess, DeleteDataFail, UpdateDataSuccess,
+    UpdateDataFail
+} = require("../AppConfig");
 
-
-// GET
-const getSummary = async (req, res) => {
-    // input null
-    try {
-        const result =
-            await ProductModel.find({}, "_id name price");
-        res.json(extension.ResponseData(true, result, "Lấy dữ liệu thành công!"));
-    } catch (e) {
-        extension.DebugLog(3, e);
-        res.status(404).json(extension.ResponseData(false, e, "Lấy dữ liệu thất bại!"));
-    }
-};
-
-const getById = async (req, res) => {
-    // input query.id
-    try {
-        const result = await ProductModel.findById(req.query.id);
-        res.json(extension.ResponseData(true, result, "Lấy dữ liệu thành công!"));
-    } catch (e) {
-        extension.DebugLog(3, e);
-        res.status(404).json(extension.ResponseData(false, e, "Lấy dữ liệu thất bại!"));
-    }
-};
-
-//POST
 const add = async (req, res) => {
-    // input body
     try {
-        const checkExist = await ProductModel.findOne({code: req.body.code});
-        if (checkExist) {
-            return res.json(extension.ResponseData(false, checkExist, "Sản phẩm đã tồn tại!"));
+        const data = await ProductModel.create(req.body);
+        if(req.file){
+            data.image = req.file.path;
         }
-        const result = new ProductModel(req.body);
-        await result.save();
-        res.json(extension.ResponseData(true, result, "Tạo sản phẩm thành công!"));
+        data.save();
+        res.json(ResponseData(true, data, AddDataSuccess))
     } catch (e) {
-        extension.DebugLog(3, e);
-        res.status(404).json(extension.ResponseData(false, e, "Tạo sản phẩm thất bại!"));
+        res.json(ResponseData(false, e.message, AddDataFail))
+        if(req.file){
+            DeleteFile(req.file.path);
+        }
     }
-};
+}
+
+const get = async (req, res) => {
+    try {
+        const data = await ProductModel.find();
+        res.json(ResponseData(true, data, GetDataSuccess))
+    } catch (e) {
+        res.json(ResponseData(false, e.message, GetDataFail))
+    }
+}
 
 const update = async (req, res) => {
-    // input body query body.id
     try {
-        const result = await ProductModel.findByIdAndUpdate(req.body.id, req.body);
-        res.json(extension.ResponseData(true, result, "Cập nhật sản phẩm thành công!"));
+        const newData = {
+            name: req.body.name,
+            price: req.body.price,
+            description: req.body.description
+        }
+        if (req.file) {
+            const oldImage = await ProductModel.findById(req.body.id);
+            if(oldImage.image) DeleteFile(oldImage.image);
+            newData.image = req.file.path
+        }
+        const data = await ProductModel.findByIdAndUpdate(req.body.id, $set = newData, {new: true});
+        res.json(ResponseData(true, data, UpdateDataSuccess))
     } catch (e) {
-        extension.DebugLog(3, e);
-        res.status(404).json(extension.ResponseData(false, e, "Cập nhật sản phẩm thất bại!"));
+        res.json(ResponseData(false, e.message, UpdateDataFail))
+        if (req.file) {
+            DeleteFile(req.file.path);
+        }
     }
-};
+}
 
 const del = async (req, res) => {
-    // input body.id
     try {
-        const result = await ProductModel.findByIdAndDelete(req.body.id);
-        res.json(extension.ResponseData(true, result, "Xóa sản phẩm thành công!"));
+        const id = req.body.id;
+        const data = await ProductModel.findByIdAndDelete(id);
+        if(data.image) DeleteFile(data.image);
+        res.json(ResponseData(true, data, DeleteDataSuccess))
     } catch (e) {
-        extension.DebugLog(3, e);
-        res.status(404).json(extension.ResponseData(false, e, "Xóa sản phẩm thất bại!"));
+        res.json(ResponseData(false, e.message, DeleteDataFail))
     }
-};
+}
 
 module.exports = {
-    getSummary,
-    getById,
     add,
+    get,
     update,
     del
 }

@@ -1,102 +1,124 @@
-﻿const StoreModel = require("../model/StoreModel");
-const extension = require("../Plugin/Extension");
-
-//=>GET
-const getSummary = async (req, res) => {
-    // input null
+﻿const StoreModel = require('../model/StoreModel');
+const {ResponseData, DeleteFile} = require("../Plugin/Extension");
+const {
+    GetDataSuccess,
+    GetDataFail,
+    UpdateDataSuccess,
+    UpdateDataFail,
+    DeleteDataSuccess,
+    DeleteDataFail, AddDataSuccess, AddDataFail
+} = require("../AppConfig");
+const bodyParser = require('body-parser');
+const get = async (req, res) => {
     try {
-        const result =
-            await StoreModel.find({}, "_id province name address status");
-        res.json(extension.ResponseData(true, result, "Lấy dữ liệu thành công!"));
+        const data = await StoreModel.find();
+        res.json(ResponseData(true, data, GetDataSuccess))
     } catch (e) {
-        extension.DebugLog(3, e);
-        res.status(404).json(extension.ResponseData(false, e, "Lấy dữ liệu thất bại! "));
-    }
-}
-
-const getByID = async (req, res) => {
-    // input query.id
-    try {
-        const result = StoreModel.findById(req.query.id);
-        res.json(extension.ResponseData(true, result, "Lấy dữ liệu thành công!"));
-    } catch (e) {
-        extension.DebugLog(3, e);
-        res.status(404).json(extension.ResponseData(false, e, "Lấy dữ liệu thất bại! "));
-    }
-}
-
-const getByProvince = async (req, res) => {
-    // input query.province
-    try {
-        const result =
-            await StoreModel.find({province: req.query.province}, "_id province name address status");
-        res.json(extension.ResponseData(true, result, "Lấy dữ liệu thành công!"));
-    } catch (e) {
-        extension.DebugLog(3, e);
-        res.status(404).json(extension.ResponseData(false, e, "Lấy dữ liệu thất bại! "));
-    }
-}
-
-const getByStatus = async (req, res) => {
-    // input query.status
-    try {
-        const result =
-            await StoreModel.find({status: req.query.status}, "_id province name address status");
-        res.json(extension.ResponseData(true, result, "Lấy dữ liệu thành công!"));
-    } catch (e) {
-        extension.DebugLog(3, e);
-        res.status(404).json(extension.ResponseData(false, e, "Lỗi dữ liệu thất bại! "));
-    }
-}
-
-//=> POST
-const add = async (req, res) => {
-    // input body
-    try {
-        const checkExist = await StoreModel.findOne({$and: [{province: req.body.province}, {name: req.body.name}]});
-        if (checkExist.length > 0) {
-            return res.json(extension.ResponseData(false, checkExist, "Cửa hàng đã tồn tại!"));
-        }
-        const result = new StoreModel(req.body);
-        await result.save();
-        res.json(extension.ResponseData(true, result, "Tạo cửa hàng thành công!"));
-    } catch (e) {
-        extension.DebugLog(3, e);
-        res.status(404).json(extension.ResponseData(false, e, "Tạo cửa hàng thất bại!"));
+        res.json(ResponseData(false, e.message, GetDataFail))
     }
 }
 
 const update = async (req, res) => {
-    // input body query body.id
     try {
-        const result = await StoreModel.findByIdAndUpdate(req.body.id, req.body);
-        res.json(extension.ResponseData(true, result, "Cập nhật thông tin cửa hàng thành công!"));
+        const newData = {
+            province: req.body.province,
+            name: req.body.name,
+            address: req.body.address,
+            phone: req.body.phone,
+            description: req.body.description,
+            date: req.body.date,
+            status: req.body.status,
+            employeeIds: req.body.employeeIds,
+            storage: req.body.storage
+        }
+        if (req.file) {
+            const oldImage = await StoreModel.findById(req.body.id);
+            DeleteFile(oldImage.image);
+            newData.image = req.file.path
+        }
+        const data = await StoreModel.findByIdAndUpdate(req.body.id, $set = newData, {new: true});
+        res.json(ResponseData(true, data, UpdateDataSuccess))
     } catch (e) {
-        extension.DebugLog(3, e);
-        res.status(404).json(extension.ResponseData(false, e, "Cập nhật thông tin cửa hàng thất bại!"));
+        res.json(ResponseData(false, e.message, UpdateDataFail))
+        if (req.file) {
+            DeleteFile(req.file.path);
+        }
+    }
+}
+const getByID = async (req, res) => {
+    try {
+        const id = req.body.id;
+        const data = await StoreModel.findById(id);
+        res.json(ResponseData(true, data, GetDataSuccess))
+    } catch (e) {
+        res.json(ResponseData(false, e.message, GetDataFail))
     }
 }
 
 const del = async (req, res) => {
-    // input body.id
     try {
-        const result = await StoreModel.findByIdAndDelete(req.body.id);
-        res.json(extension.ResponseData(true, result, "Xóa cửa hàng thành công!"));
+
+        const id = req.body.id;
+        console.log(id)
+        const find = await StoreModel.findById(id);
+        if (find.image) {
+            console.log(find.image)
+            DeleteFile(find.image);
+        }
+        const data = await StoreModel.findByIdAndDelete(id);
+        res.json(ResponseData(true, data, DeleteDataSuccess))
     } catch (e) {
-        extension.DebugLog(3, e);
-        res.status(404).json(extension.ResponseData(false, e, "Xóa cửa hàng thất bại!"));
+        res.json(ResponseData(false, e.message, DeleteDataFail))
+    }
+}
+
+const add = async (req, res) => {
+    try {
+        const data = await StoreModel({
+            province: req.body.province,
+            name: req.body.name,
+            address: req.body.address,
+            phone: req.body.phone,
+            description: req.body.description,
+            date: req.body.date,
+            status: req.body.status,
+            imageFullPath: req.body.imageFullPath,
+            employeeIds: req.body.employeeIds,
+            storage: req.body.storage
+        });
+        if (req.file) {
+            data.image = req.file.path
+        }
+        await data.save();
+        res.json(ResponseData(true, data, GetDataSuccess))
+    } catch (e) {
+        res.json(ResponseData(false, e.message, GetDataFail))
+        if (req.file) {
+            DeleteFile(req.file.path);
+        }
+    }
+}
+
+const addEmployee = async (req, res) => {
+    try {
+        const id = req.body.id;
+        const employeeId = req.body.employeeId;
+        const data = await StoreModel.findById(id);
+        data.employeeIds.push(employeeId);
+        await data.save();
+        res.json(ResponseData(true, data, AddDataSuccess))
+    } catch (e) {
+        res.json(ResponseData(false, e.message, AddDataFail))
+
     }
 }
 
 
-// EXPORT
-
 module.exports = {
-    getSummary,
-    getByID,
-    getByProvince,
-    getByStatus,
-    add,
+    get,
     update,
-    del
+    del,
+    add,
+    getByID,
+    addEmployee
 }

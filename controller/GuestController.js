@@ -1,92 +1,65 @@
 ﻿const GuestModel = require('../model/GuestModel');
-const Extension = require('../Plugin/Extension');
-const {CheckNullString} = require("../Plugin/Extension");
+const {ResponseData} = require("../Plugin/Extension");
 
-//GET
-
-const getAll = async (req, res) => {
+const addFunction = async (data) => {
     try {
-        let result = await GuestModel.find();
-        res.json(Extension.ResponseData(true, result, 'Lấy dữ liệu khách hàng thành công!'))
+        const result = await GuestModel.create(data);
+        await result.save();
+        return ResponseData(true, result, "Add guest success");
     } catch (e) {
-        res.status(404).json(Extension.ResponseData(false, e, 'Lấy dữ liệu khách hàng thất bại!'))
+        return ResponseData(false, e.message, "Add guest fail");
     }
 }
 
-const getByID = async (req, res) => {
-    //input query.id
+const add = async (req, res) => {
     try {
-        let result = await GuestModel.findById(req.query.id);
-        res.json(Extension.ResponseData(true, result, 'Lấy dữ liệu khách hàng thành công!'))
-    } catch (e) {
-        res.status(404).json(Extension.ResponseData(false, e, 'Lấy dữ liệu khách hàng thất bại!'))
+        const result = await GuestModel.create(req.body);
+        await result.save();
+        res.json(ResponseData(true, result, "Add guest success"))
+    }catch (e) {
+        res.json(ResponseData(false, e.message, "Add guest fail"))
     }
 }
 
-const findByInfo = async (req, res) => {
-    //input query.phone or query.name
+const get = async (req, res) => {
     try {
-        let result;
-        if (!CheckNullString(req.body.phone)) {
-            result = await GuestModel.find({phone: req.body.phone});
-            return res.json(Extension.ResponseData(true, result, 'Lấy dữ liệu khách hàng thành công!'))
-        } else if (!CheckNullString(req.body.name)) {
-            result = await GuestModel.find({name: {$regex: req.body.name}});
-            return res.json(Extension.ResponseData(true, result, 'Lấy dữ liệu khách hàng thành công!'))
-        } else {
-            return res.json(Extension.ResponseData(false, null, 'Không tìm thấy khách hàng có thông tin như trên!'))
-        }
+        const data = await GuestModel.find();
+        res.json(ResponseData(true, data, "Get guest success"))
     } catch (e) {
-        res.status(404).json(Extension.ResponseData(false, e, 'Lấy dữ liệu khách hàng thất bại!'))
+        res.json(ResponseData(false, e.message, "Get guest fail"))
     }
 }
-
-//POST
 
 const update = async (req, res) => {
-    //input body query body.id
     try {
-        let result = await GuestModel.findByIdAndUpdate(req.body.id, req.body);
-        res.json(Extension.ResponseData(true, result, 'Cập nhật thông tin khách hàng thành công!'));
+        const newData = {
+            name: req.body.name,
+            phone: req.body.phone,
+            address: req.body.address,
+            email: req.body.email,
+            level: req.body.level
+        }
+        const data = await GuestModel.findByIdAndUpdate(req.body.id, $set = newData, {new: true});
+        res.json(ResponseData(true, data, "Update guest success"))
     } catch (e) {
-        res.json(Extension.ResponseData(false, e, 'Cập nhật thông tin khách hàng thất bại!'));
+        res.json(ResponseData(false, e.message, "Update guest fail"))
     }
 }
 
 const del = async (req, res) => {
-    //input body.id
     try {
-        let result = await GuestModel.findByIdAndDelete(req.body.id);
-        res.json(Extension.ResponseData(true, result, 'Xóa khách hàng thành công!'));
+        const id = req.body.id;
+        const data = await GuestModel.findByIdAndDelete(id);
+        res.json(ResponseData(true, data, "Delete guest success"))
     } catch (e) {
-        res.json(Extension.ResponseData(false, e, 'Xóa khách hàng thất bại!'));
+        res.json(ResponseData(false, e.message, "Delete guest fail"))
     }
 }
-
-// Reference Method
-
-const add = async (data) => {
-    //input body
-    try {
-        // check exist
-        let checkExist = await GuestModel.findOne({phone: data.phone});
-        if (checkExist.length > 0) {
-            return Extension.ResponseData(false, checkExist, 'Số điện thoại khách hàng đã tồn tại!');
-        }
-        let result = new GuestModel(data);
-        await result.save();
-        return Extension.ResponseData(true, result, 'Tạo khách hàng thành công!');
-    } catch (e) {
-        return Extension.ResponseData(false, e, 'Tạo khách hàng thất bị!');
-    }
-}
-
 
 module.exports = {
-    getAll,
-    getByID,
-    findByInfo,
+    add,
+    get,
     update,
     del,
-    add
+    addFunction
 }

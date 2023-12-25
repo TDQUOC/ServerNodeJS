@@ -17,6 +17,7 @@ const billSchema = new Schema({
     finalMoney: {type: Number, default: 0},
     discountCode: {type: String},
     giftCode: {type: String},
+    status: {type: String, default: "paid"}, // paid, ordered, cancel
     image: {type: String},
     imageFullPath: {type: String},
     time: {type: String, default: extension.GetDate('yyyy-MM-dd-HH:mm:ss')},

@@ -19,6 +19,12 @@ mongodbFunction(db)
 
 // create express app
 const app = express()
+const storeRoute = require("./Route/StoreRoute")
+const employeeRoute = require("./Route/EmployeeRoute")
+const guestRoute = require("./Route/GuestRoute")
+const productRoute = require("./Route/ProductRoute")
+const billRoute = require("./Route/BillRoute")
+const daySummaryRoute = require("./Route/DaySumaryRoute")
 
 SetupApp(app);
 
@@ -53,7 +59,15 @@ function SetupApp(app) {
     app.listen(PORT, () => {
         extension.DebugLog(1, "server is listening on port " + PORT);
     })
+
 }
 
 function setupRouter(app) {
+    app.use("/api/store", storeRoute)
+    app.use("/api/employee", employeeRoute)
+    app.use("/api/guest", guestRoute)
+    app.use("/api/product", productRoute)
+    app.use("/api/bill", billRoute)
+    app.use("/api/day-summary", daySummaryRoute)
+
 }
