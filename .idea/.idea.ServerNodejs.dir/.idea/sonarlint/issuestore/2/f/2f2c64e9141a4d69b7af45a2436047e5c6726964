@@ -1,0 +1,30 @@
+
+{javascript:S2703/"ZAdd the "let", "const" or "var" keyword to this declaration of "$set" to make it explicit.(í÷†‡ÿÿÿÿÿ
+Wjavascript:S1121/"6Extract the assignment of "$set" from this expression.(í÷†‡ÿÿÿÿÿ
+Rjavascript:S1481@"6Remove the declaration of the unused 'today' variable.(Š¶‡
+Ojavascript:S1854@"3Remove this useless assignment to variable "today".(Š¶‡
+Tjavascript:S1481A"8Remove the declaration of the unused 'storeId' variable.(Ä¬ñ¦
+Qjavascript:S1854A"5Remove this useless assignment to variable "storeId".(Ä¬ñ¦
+[javascript:S1481B":Remove the declaration of the unused 'storeName' variable.(–ù½ÿÿÿÿÿ
+Xjavascript:S1854B"7Remove this useless assignment to variable "storeName".(–ù½ÿÿÿÿÿ
+Yjavascript:S1481h"6Remove the declaration of the unused 'today' variable.(Š¶‡8á¯ÙÊ1
+Vjavascript:S1854h"3Remove this useless assignment to variable "today".(Š¶‡8á¯ÙÊ1
+[javascript:S1481i"8Remove the declaration of the unused 'storeId' variable.(Ä¬ñ¦8á¯ÙÊ1
+Xjavascript:S1854i"5Remove this useless assignment to variable "storeId".(Ä¬ñ¦8á¯ÙÊ1
+bjavascript:S1481j":Remove the declaration of the unused 'storeName' variable.(–ù½ÿÿÿÿÿ8á¯ÙÊ1
+_javascript:S1854j"7Remove this useless assignment to variable "storeName".(–ù½ÿÿÿÿÿ8á¯ÙÊ1
+Zjavascript:S1481†"6Remove the declaration of the unused 'today' variable.(Š¶‡8°ÖÚÊ1
+Wjavascript:S1854†"3Remove this useless assignment to variable "today".(Š¶‡8°ÖÚÊ1
+\javascript:S1481‡"8Remove the declaration of the unused 'storeId' variable.(Ä¬ñ¦8±ÖÚÊ1
+Yjavascript:S1854‡"5Remove this useless assignment to variable "storeId".(Ä¬ñ¦8±ÖÚÊ1
+cjavascript:S1481ˆ":Remove the declaration of the unused 'storeName' variable.(–ù½ÿÿÿÿÿ8±ÖÚÊ1
+`javascript:S1854ˆ"7Remove this useless assignment to variable "storeName".(–ù½ÿÿÿÿÿ8±ÖÚÊ1
+;javascript:S125Š"Remove this commented out code.(ĞùÖĞ
+;javascript:S125“"Remove this commented out code.(ƒä¿Á
+Zjavascript:S1481¡"6Remove the declaration of the unused 'today' variable.(Š¶‡8ßÆÖÎÊ1
+Wjavascript:S1854¡"3Remove this useless assignment to variable "today".(Š¶‡8ßÆÖÎÊ1
+\javascript:S1481¢"8Remove the declaration of the unused 'storeId' variable.(Ä¬ñ¦8ßÆÖÎÊ1
+Yjavascript:S1854¢"5Remove this useless assignment to variable "storeId".(Ä¬ñ¦8ßÆÖÎÊ1
+cjavascript:S1481£":Remove the declaration of the unused 'storeName' variable.(–ù½ÿÿÿÿÿ8ßÆÖÎÊ1
+`javascript:S1854£"7Remove this useless assignment to variable "storeName".(–ù½ÿÿÿÿÿ8ßÆÖÎÊ1
+Mjavascript:S4123ç"1Refactor this redundant 'await' on a non-promise.(Ğ¤áB

@@ -59,15 +59,13 @@ const del = async (req, res) => {
         res.json(ResponseData(false, e.message, DeleteDataFail))
     }
 }
-
-
 const addBill = async (req, res) => {
     try {
         const today = GetDate("yyyy-MM-dd");
         const storeId = req.body.storeId;
         const storeName = req.body.storeName;
 
-        const ToDaySummary = await CheckIfExist(storeId, today, storeName);
+        const ToDaySummary = await DaySummaryModel.findById(req.body.id);
 
         if (!req.body.detail) return res.json(ResponseData(false, null, "Vui lòng nhập đủ thông tin vào hóa đơn!"));
         let bill = {
@@ -107,7 +105,7 @@ const addImportOrExport = async (req, res) => {
         const storeId = req.body.storeId;
         const storeName = req.body.storeName;
 
-        const ToDaySummary = await CheckIfExist(storeId, today, storeName);
+        const ToDaySummary = await DaySummaryModel.findById(req.body.id);
 
         if (!req.body.detail) return res.json(ResponseData(false, null, "Vui lòng nhập đủ thông tin!"));
         let form = {
@@ -164,7 +162,7 @@ const addCheckOut = async (req, res) => {
         const storeId = req.body.storeId;
         const storeName = req.body.storeName;
 
-        const ToDaySummary = await CheckIfExist(storeId, today, storeName);
+        const ToDaySummary = await DaySummaryModel.findById(req.body.id);
 
         let checkOut = {
             employeeId: req.body.employeeId,

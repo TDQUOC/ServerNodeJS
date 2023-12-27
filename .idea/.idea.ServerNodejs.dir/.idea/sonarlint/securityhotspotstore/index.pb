@@ -11,8 +11,6 @@ C
 Plugin/Extension.js,8\6\86d3c1a2e729adbceb97194cb16019662a633fad
 B
 model/BillModel.js,0\7\07fd71f8fb1a42e6b50b1bb83f3a22673b376f02
-C
-model/DaySummary.js,9\8\98c951bf3b0226e9663b2fa08d6d7512f24ac7e6
 F
 model/EmployeeModel.js,c\7\c709d7e51793ea8257b71a0f15dd3b30c81bd37c
 E
@@ -27,3 +25,7 @@ O
 controller/ProductController.js,9\e\9e55668efdd6c41c4f613b48e962a2c9330b001e
 M
 controller/GuestController.js,6\7\6772725d22ed9109f1d30ff1ca79b0e9994b3cd7
+R
+"controller/DaySummaryController.js,2\f\2f2c64e9141a4d69b7af45a2436047e5c6726964
+P
+ controller/EmployeeController.js,8\6\860007e404b0666aae061ae8faeef3201911c625
