@@ -1,5 +1,5 @@
 ﻿const DaySummaryModel = require('../model/DaySummaryModel');
-const {ResponseData, GetDate, DeleteFile, DebugLog} = require("../Plugin/Extension");
+const { ResponseData, GetDate, DeleteFile, DebugLog } = require("../Plugin/Extension");
 const {
     AddDataSuccess, AddDataFail, GetDataSuccess, GetDataFail, UpdateDataSuccess, UpdateDataFail, DeleteDataSuccess,
     DeleteDataFail
@@ -29,7 +29,7 @@ const getByID = async (req, res) => {
         const id = req.body.id;
         const data = await DaySummaryModel.findById(id);
         res.json(ResponseData(true, data, GetDataSuccess))
-    }catch (e) {
+    } catch (e) {
         res.json(ResponseData(false, e.message, GetDataFail))
     }
 }
@@ -93,7 +93,7 @@ const addBill = async (req, res) => {
             res.json(ResponseData(false, ToDaySummary.data, AddDataFail))
         }
     } catch (e) {
-        if(req.file) DeleteFile(req.file.path);
+        if (req.file) DeleteFile(req.file.path);
         res.json(ResponseData(false, e.message, AddDataFail))
     }
 }
@@ -145,7 +145,7 @@ const addCheckIn = async (req, res) => {
         }
 
         //if (ToDaySummary === true) {
-            await addCheckInFunc(ToDaySummary, checkIn, res)
+        await addCheckInFunc(ToDaySummary, checkIn, res)
         //} else {
         //    DebugLog(3, ToDaySummary.data);
         //    res.json(ResponseData(false, ToDaySummary.data, AddDataFail))
@@ -171,12 +171,12 @@ const addCheckOut = async (req, res) => {
             image: req.file ? req.file.path : null
         }
 
-        if (ToDaySummary.isSuccess === true) {
-            await addCheckOutFunc(ToDaySummary.data, checkOut, res)
-        } else {
-            DebugLog(3, ToDaySummary.data);
-            res.json(ResponseData(false, ToDaySummary.data, AddDataFail))
-        }
+        // if (ToDaySummary.isSuccess === true) {
+        await addCheckOutFunc(ToDaySummary, checkOut, res)
+        // } else {
+        //     DebugLog(3, ToDaySummary.data);
+        //     res.json(ResponseData(false, ToDaySummary.data, AddDataFail))
+        // }
     } catch (e) {
         if (req.file) DeleteFile(req.file.path);
         res.json(ResponseData(false, e.message, AddDataFail))
@@ -208,7 +208,7 @@ const addCheckInFunc = async (daysummary, checkIn, res) => {
 }
 const CheckIfExist = async (storeId, today, storeName) => {
     try {
-        let ToDaySummary = await DaySummaryModel.findOne({$and: [{date: today}, {storeId: storeId}]});
+        let ToDaySummary = await DaySummaryModel.findOne({ $and: [{ date: today }, { storeId: storeId }] });
         if (ToDaySummary) {
             return ResponseData(true, ToDaySummary, GetDataSuccess);
         } else {
